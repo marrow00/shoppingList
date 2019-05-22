@@ -1,0 +1,23 @@
+{
+  "name": "shoppinglist",
+  "version": "1.0.0",
+  "description": "shopping list desktop app",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marrow00/shoppingList.git"
+  },
+  "author": "marrow00",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marrow00/shoppingList/issues"
+  },
+  "homepage": "https://github.com/marrow00/shoppingList#readme",
+  "devDependencies": {
+    "electron": "^5.0.1"
+  }
+}
