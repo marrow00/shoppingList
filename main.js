@@ -2,7 +2,10 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const {app, BrowserWindow, Menu} = electron;
+const {app, BrowserWindow, Menu, ipcMain} = electron;
+
+// set env
+process.env.NODE_ENV = 'production';
 
 // console.log('Your App Path: + ', app.getAppPath());
 
@@ -56,6 +59,13 @@ function createAddWindow(){
         addWindow = null;
     });
 }
+// catch item:add
+ipcMain.on('item:add',function(e,item){
+    console.log(item);
+    mainWindow.webContents.send('item:add',item);
+    addWindow.close();
+});
+
 // create menu tempalte
 const mainMenuTemplate=[
     {
@@ -68,7 +78,10 @@ const mainMenuTemplate=[
                 }
             },
             {
-                label: 'Clear Items'
+                label: 'Clear Items',
+                click(){
+                    mainWindow.webContents.send('item:clear');
+                }
             },
             {
                 label:'Quit',
@@ -79,4 +92,26 @@ const mainMenuTemplate=[
             }
         ]
     }
-]
+];
+// if mac add empty object to menu
+if(process.platform=='darwin'){
+    mainMenuTemplate.unshift({});
+}
+// add developer tols item if not in production
+if(process.env.NODE_ENV !=='production'){
+    mainMenuTemplate.push({
+        label: 'Developer Tools',
+        submenu:[
+            {
+                label: 'Toggle DevTools',
+                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+                click(item, focusedWindow){
+                    focusedWindow.toggleDevTools();
+                }
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    })
+}
